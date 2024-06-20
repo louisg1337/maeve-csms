@@ -163,7 +163,20 @@ var serveCmd = &cobra.Command{
 		slog.Info("otelCollectorAddr", otelCollectorAddr)
 		slog.Info("logFormat", logFormat)
 
-		if wssAddr != "" {
+		certs := []string{tlsServerCert, tlsServerKey}
+		certs = append(certs, tlsTrustCert...)
+		certsProvided := 0
+		for _, cert := range certs {
+			_, err := os.ReadFile(cert)
+			if err != nil {
+				certsProvided++
+			}
+		}
+		slog.Info("certsProvided", certsProvided)
+
+		if certsProvided == 0 {
+			slog.Warn("No certs were provided, WSS will be closed")
+		} else if wssAddr != "" {
 			if tlsServerCert == "" {
 				return fmt.Errorf("no tls server cert specified for wss connection")
 			}
