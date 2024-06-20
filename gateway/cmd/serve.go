@@ -7,6 +7,10 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"net/url"
+	"os"
+	"time"
+
 	"github.com/spf13/cobra"
 	"github.com/subnova/slog-exporter/slogtrace"
 	"github.com/thoughtworks/maeve-csms/gateway/registry"
@@ -21,9 +25,6 @@ import (
 	"golang.org/x/exp/slog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"net/url"
-	"os"
-	"time"
 )
 
 var (
@@ -148,6 +149,19 @@ var serveCmd = &cobra.Command{
 			server.WithOtelTracer(tracer))
 		wsServer := server.New("ws", wsAddr, nil, websocketHandler)
 		var wssServer *server.Server
+
+		slog.Info("mqttAddr", mqttAddr)
+		slog.Info("wsAddr", wsAddr)
+		slog.Info("wssAddr", wssAddr)
+		slog.Info("statusAddr", statusAddr)
+		slog.Info("tlsServerCert", tlsServerCert)
+		slog.Info("tlsServerKey", tlsServerKey)
+		slog.Info("tlsTrustCert", tlsTrustCert)
+		slog.Info("orgNames", orgNames)
+		slog.Info("managerApiAddr", managerApiAddr)
+		slog.Info("trustProxyHeaders", trustProxyHeaders)
+		slog.Info("otelCollectorAddr", otelCollectorAddr)
+		slog.Info("logFormat", logFormat)
 
 		if wssAddr != "" {
 			if tlsServerCert == "" {
