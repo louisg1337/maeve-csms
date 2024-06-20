@@ -171,6 +171,7 @@ var serveCmd = &cobra.Command{
 		for _, cert := range certs {
 			_, err := os.ReadFile(cert)
 			if err != nil {
+				slog.Info("Found cert:", cert)
 				certsProvided++
 				break
 			}
