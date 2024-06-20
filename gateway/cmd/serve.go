@@ -163,13 +163,16 @@ var serveCmd = &cobra.Command{
 		slog.Info("otelCollectorAddr", otelCollectorAddr)
 		slog.Info("logFormat", logFormat)
 
+		slog.Info("here 1")
 		certs := []string{tlsServerCert, tlsServerKey}
 		certs = append(certs, tlsTrustCert...)
 		certsProvided := 0
+		slog.Info("About to check each cert to see if its real")
 		for _, cert := range certs {
 			_, err := os.ReadFile(cert)
 			if err != nil {
 				certsProvided++
+				break
 			}
 		}
 		slog.Info("certsProvided", certsProvided)
